@@ -85,33 +85,33 @@ def KCenter1D(y,K):
 								D[k][i] = d + D[k-1][j-1]
 								B[k][i] = float(j)
 
-		#Backtrack to find the clusters of the data points
-		cluster_right = N
-		cluster_left  = None
-		Cluster 			= np.array([None]*N+1)   // record which cluster each point belongs to
-		Centers 			= np.array([None]*K+1)	 // record the center of each cluster
-		WithinSS 		 = np.array([None]*K+1)   // within sum of distance square of each cluster
-		Size 				 = np.array([None]*K+1)	 // size of each cluster
+	#Backtrack to find the clusters of the data points
+	cluster_right = N
+	cluster_left  = None
+	Cluster 			= np.array([None]*N+1)   // record which cluster each point belongs to
+	Centers 			= np.array([None]*K+1)	 // record the center of each cluster
+	WithinSS 		 = np.array([None]*K+1)   // within sum of distance square of each cluster
+	Size 				 = np.array([None]*K+1)	 // size of each cluster
 
-		for k in reversed(range(1,K+1)):
+	for k in reversed(range(1,K+1)):
 
-			cluster_left = B[k][cluster_right]
+		cluster_left = B[k][cluster_right]
 
-			for i in range(cluster_left,cluster_right+1):
-				Cluster[i] = k
+		for i in range(cluster_left,cluster_right+1):
+			Cluster[i] = k
 
-			sum = 0.0
-			for a in range(cluster_left,cluster_right+1):
-				sum += x[a]
+		sum = 0.0
+		for a in range(cluster_left,cluster_right+1):
+			sum += x[a]
 
-			Centers[k] = sum / (float(cluster_right) - cluster_left + 1)
+		Centers[k] = sum / (float(cluster_right) - cluster_left + 1)
 
-			for a in range(cluster_left,cluster_right+1):
-				WithinSS[k] += (x[a] - result.Centers[k]) **2
+		for a in range(cluster_left,cluster_right+1):
+			WithinSS[k] += (x[a] - Centers[k]) **2
 
-			Size[k] = cluster_right - int(cluster_left) + 1
+		Size[k] = cluster_right - int(cluster_left) + 1
 
-			if (k > 1):
-				cluster_right = int(cluster_left) - 1
+		if (k > 1):
+			cluster_right = int(cluster_left) - 1
 
-		return {'Cluster':Cluster,'Centers':Centers,'Size':Size}
+	return {'Cluster':Cluster,'Centers':Centers,'Size':Size}
